@@ -1,0 +1,78 @@
+/* Name: Starkely Cord Generator
+ * Description: Creates the cords for Hyperbolic paraboloid.
+ * Author: Larry Gaitan-Rodriguez, Robert Weinmann, Ariana Hall-Lagos of HWG Associates.
+ * Creation: 7/3/19
+ * EDITS:
+ * 1) 7/3/19 Created File write.
+ * 2) Named it the Starkely Cord Generator after that one beatle guy who draws MS Paint pictures. 
+ */
+
+import java.text.DecimalFormat;
+import java.io.*;
+
+public class starkely
+{
+  public static void main(String[] args)
+  {
+    //Welcome
+    System.out.println("Starkely Cord Generator for a Hyperbolic Paraboloid"); 
+    System.out.println("Uses the Following function: z=((y^2)/(A^2))-((x^2)/(A^2))");
+    //Creates the Decimal Formatting Object
+    DecimalFormat df = new DecimalFormat("0.00");
+    //Domain 
+    double domainRight = 2;
+    double domainLeft = -2;
+    //Range
+    double rangeRight = 2;
+    double rangeLeft = -2;
+    
+     //Creates the varibles for the x,y,z planes.
+    double x_plane = domainLeft;
+    double y_plane = rangeLeft;
+    double z_plane;
+    //Creates A,B Variables
+    double A = 2;
+    double B = -1.7;
+    
+    //Progress report
+    int count = 0;
+    //Creates the File Writer and introduces the function
+   try{    
+      //Writes to a premade .SCR file
+      FileWriter inscriber =new FileWriter("HP_Cords.SCR");
+      //3DPoly is the command that autocad uses to plot the points.
+      inscriber.write("._3Dpoly");
+      inscriber.write("\r\n");
+      //Loops the function from the domain -2<x<2 and range -2<y<2
+      for (double limit = domainLeft; limit < domainRight; limit = limit + 0.1)
+      {
+        System.out.println("Lines of cordinates generated: "+count);
+        y_plane = rangeLeft;
+        for (double limitR = rangeLeft; limitR < rangeRight; limitR = limitR +0.1)
+        {
+          //The function for the HP,
+          z_plane = ((y_plane*y_plane)/(B*B)) - ((x_plane*x_plane)/(A*A));
+          
+          //System.out.println(df.format(x_plane) +","+ df.format(y_plane) +","+ df.format(z_plane));
+          
+          //Writes the cords to the file
+          inscriber.write(df.format(x_plane) +","+ df.format(y_plane) +","+ df.format(z_plane));
+          inscriber.write("\r\n");
+          y_plane = y_plane+0.1;
+          count++;
+        }
+        x_plane = x_plane+0.1;
+      } 
+    //Writes a space so AutoCad understands this is the end of the script. 
+    inscriber.write(" ");
+    inscriber.flush();
+    inscriber.close();  
+   }
+   catch(Exception e)
+   {
+     System.out.println(e);
+   }    
+   System.out.println("Generation Completed");
+   System.out.println("Total lines of cords generated: "+count);
+}
+}
